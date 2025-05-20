@@ -2,10 +2,14 @@ import { useEffect, useState, useCallback } from "react";
 import {
   Montserrat_100Thin, Montserrat_200ExtraLight, Montserrat_300Light, Montserrat_400Regular,
   Montserrat_500Medium, Montserrat_600SemiBold, Montserrat_700Bold, Montserrat_800ExtraBold, Montserrat_900Black
-} from "@expo-google-fonts/montserrat"
+} from "@expo-google-fonts/montserrat-alternates"
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
-import { Intro } from "./App/Screens/Intro";
+import { Profile } from "./App/Screens/Profile";
+import { Avatar, Button, Card } from "react-native-paper";
+import { FontAwesome } from '@expo/vector-icons';
+// import {Icon} from 'react-native-vector-icons/FontAwesome';
+// import { Ionicons } from '@expo/vector-icons';
 
 
 // LogBox.ignoreLogs(["ViewPropTypes will be removed from React Native, along with all other PropTypes. We recommend that you migrate away from PropTypes and switch to a type system like TypeScript. If you need to continue using ViewPropTypes, migrate to the 'deprecated-react-native-prop-types' package."])
@@ -48,6 +52,6 @@ export default function App() {
   }
 
   return (
-    <Intro />
+    <Profile />
   );
 }
