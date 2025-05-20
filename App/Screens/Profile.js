@@ -16,7 +16,7 @@ export function Profile() {
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={[styles.header, { backgroundColor: Theme.colors.greenDark }]}>
                     <Image source={{ uri: 'https://i.imgur.com/R66g1Pe.jpg' }} style={styles.avatar} />
-                    <Text style={styles.username}>username@email.com</Text>
+                    <Text style={styles.username}>john@gmail.com</Text>
                 </View>
 
                 <View style={styles.infoBox}>
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingVertical: 40,
         // backgroundColor: '#fff',
-        flex: 1,
+        // flex: 1,
     },
     header: {
         alignItems: 'center',
@@ -97,7 +97,7 @@ const styles = StyleSheet.create({
         borderColor: '#fff',
     },
     username: {
-        color: '#fff',
+        color: 'white',
         fontSize: 16,
         marginTop: 10,
     },

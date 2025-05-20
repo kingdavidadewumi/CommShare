@@ -34,15 +34,15 @@ export const Theme = {
 
     fonts: {
         brand: "Fascinate_400Regular",
-        text100: "Montserrat_100Thin",
-        text200: "Montserrat_200ExtraLight",
-        text300: "Montserrat_300Light",
-        text400: "Montserrat_400Regular",
-        text500: "Montserrat_500Medium",
-        text600: "Montserrat_600SemiBold",
-        text700: "Montserrat_700Bold",
-        text800: "Montserrat_800ExtraBold",
-        text900: "Montserrat_900Black",
+        text100: "MontserratAlternates_100Thin",
+        text200: "MontserratAlternates_200ExtraLight",
+        text300: "MontserratAlternates_300Light",
+        text400: "MontserratAlternates_400Regular",
+        text500: "MontserratAlternates_500Medium",
+        text600: "MontserratAlternates_600SemiBold",
+        text700: "MontserratAlternates_700Bold",
+        text800: "MontserratAlternates_800ExtraBold",
+        text900: "MontserratAlternates_900Black",
     },
 
     sizes: {

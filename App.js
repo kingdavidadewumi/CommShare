@@ -1,13 +1,15 @@
 import { useEffect, useState, useCallback } from "react";
 import {
-  Montserrat_100Thin, Montserrat_200ExtraLight, Montserrat_300Light, Montserrat_400Regular,
-  Montserrat_500Medium, Montserrat_600SemiBold, Montserrat_700Bold, Montserrat_800ExtraBold, Montserrat_900Black
+  MontserratAlternates_100Thin, MontserratAlternates_200ExtraLight, MontserratAlternates_300Light, MontserratAlternates_400Regular,
+  MontserratAlternates_500Medium, MontserratAlternates_600SemiBold, MontserratAlternates_700Bold, MontserratAlternates_800ExtraBold, MontserratAlternates_900Black
 } from "@expo-google-fonts/montserrat-alternates"
 import * as SplashScreen from "expo-splash-screen";
 import * as Font from "expo-font";
 import { Profile } from "./App/Screens/Profile";
 import { Avatar, Button, Card } from "react-native-paper";
 import { FontAwesome } from '@expo/vector-icons';
+import { StackNavigator } from "./App/Navigator/Stack";
+// import { StackNavigator } from "./App/Navigator/Stack";
 // import {Icon} from 'react-native-vector-icons/FontAwesome';
 // import { Ionicons } from '@expo/vector-icons';
 
@@ -21,15 +23,15 @@ export default function App() {
     async function prepare() {
       try {
         // await Font.loadAsync({ Fascinate_400Regular });
-        await Font.loadAsync({ Montserrat_100Thin });
-        await Font.loadAsync({ Montserrat_200ExtraLight });
-        await Font.loadAsync({ Montserrat_300Light });
-        await Font.loadAsync({ Montserrat_400Regular });
-        await Font.loadAsync({ Montserrat_500Medium });
-        await Font.loadAsync({ Montserrat_600SemiBold });
-        await Font.loadAsync({ Montserrat_700Bold });
-        await Font.loadAsync({ Montserrat_800ExtraBold });
-        await Font.loadAsync({ Montserrat_900Black });
+        await Font.loadAsync({ MontserratAlternates_100Thin });
+        await Font.loadAsync({ MontserratAlternates_200ExtraLight });
+        await Font.loadAsync({ MontserratAlternates_300Light });
+        await Font.loadAsync({ MontserratAlternates_400Regular });
+        await Font.loadAsync({ MontserratAlternates_500Medium });
+        await Font.loadAsync({ MontserratAlternates_600SemiBold });
+        await Font.loadAsync({ MontserratAlternates_700Bold });
+        await Font.loadAsync({ MontserratAlternates_800ExtraBold });
+        await Font.loadAsync({ MontserratAlternates_900Black });
         await new Promise(resolve => setTimeout(resolve, 2000));
       } catch (e) {
         console.warn(e);
@@ -52,6 +54,6 @@ export default function App() {
   }
 
   return (
-    <Profile />
+    <StackNavigator />
   );
 }
