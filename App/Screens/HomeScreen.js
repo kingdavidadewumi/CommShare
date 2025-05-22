@@ -5,6 +5,8 @@ import { FontAwesome } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Profile } from './Profile';
 import GroupList from './GroupList';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+
 
 const recentTransactions = [
     {
@@ -288,9 +290,11 @@ const styles = StyleSheet.create({
 
 const Tab = createBottomTabNavigator();
 export function HomeScreen() {
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    return(
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
         <Tab.Screen name="Home" component={Home} />
         <Tab.Screen name="Estates" component={GroupList} />
         <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
+    )
 }

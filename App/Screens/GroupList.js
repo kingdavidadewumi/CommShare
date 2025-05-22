@@ -45,7 +45,7 @@ const GroupList = ({ navigation, user }) => {
       style={styles.itemContainer}
       onPress={() => navigation.navigate('GroupChat', { groupId: item.id })}
     >
-      <Image source={require('../../assets/bmw.jpeg')} style={styles.avatar} />
+      <Image source={require('../../assets/icon.png')} style={styles.avatar} />
       <View style={styles.textContainer}>
         <View style={styles.headerRow}>
           <Text style={styles.groupName}>{item.name}</Text>
@@ -59,7 +59,7 @@ const GroupList = ({ navigation, user }) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.profileContainer}>
-          <Image source={require('../../assets/bmw.jpeg')} style={styles.profileAvatar} />
+          <Image source={require('../../assets/icon.png')} style={styles.profileAvatar} />
         </View>
         <Text style={styles.headerTitle}>Commshare Groups</Text>
         <TouchableOpacity

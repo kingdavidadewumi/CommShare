@@ -5,6 +5,7 @@ import { CreateEstate } from '../Screens/CreateEstate';
 import { CreatedEstates } from '../Screens/CreatedEstates';
 import { Profile } from '../Screens/Profile';
 import { EditProfile } from '../Screens/EditProfile';
+import GroupList from '../Screens/GroupList';
 
 const Stack = createStackNavigator();
 export function StackNavigator() {
@@ -16,6 +17,7 @@ export function StackNavigator() {
                 <Stack.Screen name="CreatedEstates" component={CreatedEstates} />
                 <Stack.Screen name="Profile" component={Profile} />
                 <Stack.Screen name="EditProfile" component={EditProfile} />
+                <Stack.Screen name="GroupList" component={GroupList} />
             </Stack.Navigator>
         </NavigationContainer>
     )
