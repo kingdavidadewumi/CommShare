@@ -6,18 +6,20 @@ import { CreatedEstates } from '../Screens/CreatedEstates';
 import { Profile } from '../Screens/Profile';
 import { EditProfile } from '../Screens/EditProfile';
 import GroupList from '../Screens/GroupList';
+import { LogIn } from '../Screens/LogIn';
 
 const Stack = createStackNavigator();
 export function StackNavigator() {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName="HomeScreen" >
+            <Stack.Navigator initialRouteName="LogIn" >
                 <Stack.Screen name="HomeScreen" component={HomeScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="CreateEstate" component={CreateEstate} />
                 <Stack.Screen name="CreatedEstates" component={CreatedEstates} />
                 <Stack.Screen name="Profile" component={Profile} />
                 <Stack.Screen name="EditProfile" component={EditProfile} />
                 <Stack.Screen name="GroupList" component={GroupList} />
+                <Stack.Screen name="LogIn" component={LogIn} />
             </Stack.Navigator>
         </NavigationContainer>
     )

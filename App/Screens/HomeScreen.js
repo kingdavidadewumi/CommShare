@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import { Theme } from "../Components/Theme";
-import { FontAwesome } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { Profile } from './Profile';
 import GroupList from './GroupList';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
+import { AppContext } from '../Components/globalVariables';
 
 const recentTransactions = [
     {
@@ -41,16 +40,18 @@ const totalAmount = "₦1,156,800,400";
 const joinedEstates = 3;
 
 function Home({ navigation }) {
+    const { userUID, userInfo } = useContext(AppContext)
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.profileContainer}>
                     <Image
-                        source={{ uri: 'https://randomuser.me/api/portraits/men/1.jpg' }}
+                        source={require("../../assets/icon.png")}
                         style={styles.profileImage}
                     />
                     <View>
-                        <Text style={styles.greetingText}>Hi, {username}</Text>
+                        <Text style={styles.greetingText}>Hi, {userInfo.firstname} {userInfo.lastname}</Text>
                         <Text style={styles.welcomeText}>Welcome to Commshare</Text>
                     </View>
                 </View>
@@ -74,7 +75,7 @@ function Home({ navigation }) {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('CreatedEstates')}>
+            <TouchableOpacity style={[styles.card, { marginTop: 10 }]} onPress={() => navigation.navigate('CreatedEstates', { location: "Kubwa, NYSC" })}>
                 <View style={styles.cardContent}>
                     <View>
                         <Text style={styles.cardTitle}>Created Estate Groups</Text>
@@ -97,7 +98,7 @@ function Home({ navigation }) {
                 </View>
             </TouchableOpacity>
 
-            <Text style={styles.sectionTitle}>Recent Transactions</Text>
+            <Text style={[styles.sectionTitle, { marginTop: 20 }]}>Recent Transactions</Text>
             <FlatList
                 scrollEnabled={false}
                 data={recentTransactions}
@@ -121,6 +122,41 @@ function Home({ navigation }) {
         </View>
     );
 };
+
+
+const Tab = createBottomTabNavigator();
+export function HomeScreen() {
+    return (
+        <Tab.Navigator
+            screenOptions={({ route }) => ({
+                tabBarIcon: ({ focused, color }) => {
+                    let iconName;
+
+                    if (route.name === 'Home') {
+                        iconName = focused ? 'speedometer' : 'speedometer-outline';
+                    } else if (route.name === 'Assets') {
+                        iconName = focused ? 'diamond' : 'diamond-outline';
+                    } else if (route.name === 'Estates') {
+                        iconName = focused ? 'business' : 'business-outline';
+                    } else if (route.name === 'ShareUnit') {
+                        iconName = focused ? 'bar-chart' : 'bar-chart-outline';
+                    } else if (route.name === 'Profile') {
+                        iconName = focused ? 'person' : 'person-outline';
+                    }
+
+                    return <Ionicons name={iconName} size={28} color={color} />;
+                },
+                tabBarActiveTintColor: Theme.colors.primary,
+                tabBarInactiveTintColor: Theme.colors.gray,
+                headerShown: false,
+            })}
+        >
+            <Tab.Screen name="Home" component={Home} options={{ title: "Dashboard" }} />
+            <Tab.Screen name="Estates" component={GroupList} />
+            <Tab.Screen name="Profile" component={Profile} options={{ title: "Johnny" }} />
+        </Tab.Navigator>
+    )
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -287,14 +323,3 @@ const styles = StyleSheet.create({
         color: Theme.colors.text2,
     },
 });
-
-const Tab = createBottomTabNavigator();
-export function HomeScreen() {
-    return(
-        <Tab.Navigator screenOptions={{ headerShown: false }}>
-        <Tab.Screen name="Home" component={Home} />
-        <Tab.Screen name="Estates" component={GroupList} />
-        <Tab.Screen name="Profile" component={Profile} />
-    </Tab.Navigator>
-    )
-}

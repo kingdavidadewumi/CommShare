@@ -15,19 +15,22 @@ const carouselLinks = [
 ]
 
 const { width, height } = Dimensions.get("screen")
+ console.log('Width:', width);
+    console.log('Height:', height);
 
 export function Profile() {
     const [visibility, setVisibility] = useState(false)
-
+  
 
     return (
-        <SafeAreaView style={{ flex: 1, backgroundColor: Theme.colors.primary }}>
-            <ScrollView contentContainerStyle={styles.container}>
-                <View style={[styles.header, { backgroundColor: Theme.colors.primary }]}>
-                    <Image source={{ uri: 'https://i.imgur.com/R66g1Pe.jpg' }} style={styles.avatar} />
-                    <Text style={styles.username}>username@email.com</Text>
-                </View>
+        <SafeAreaView style={{ flex: 1, }}>
 
+
+            <View style={[styles.header, { backgroundColor: Theme.colors.primary }]}>
+                <Image source={{ uri: 'https://i.imgur.com/R66g1Pe.jpg' }} style={styles.avatar} />
+                <Text style={styles.username}>username@email.com</Text>
+            </View>
+            <ScrollView>
                 <View style={{ padding: 20 }}>
                     <View style={styles.infoBox}>
                         <Text style={styles.infoText}><Text style={styles.label}>Full Name:</Text> John Doe</Text>
@@ -105,7 +108,7 @@ export function Profile() {
                 >
                     <View style={{ backgroundColor: "#000000ac", flex: 1, }}>
                         <View style={{ flex: 1 }}></View>
-                        <View style={{ backgroundColor: "#ffffff", padding: 20, paddingBottom: 30, borderTopRightRadius: 20, borderTopLeftRadius: 20 }}>
+                        <View style={{ backgroundColor: "#ffffff", padding: 20, paddingBottom: 30, borderTopRightRadius: 20, borderTopLeftRadius: 20, flex: 1 }}>
                             <Text>Log Out</Text>
                             <Text>Are you sure you want to log out of this app?</Text>
                             <AppButton onPress={() => setVisibility(false)}
@@ -117,6 +120,7 @@ export function Profile() {
                 </Modal>
 
             </ScrollView>
+
         </SafeAreaView>
     );
 }
@@ -126,7 +130,8 @@ const styles = StyleSheet.create({
         // alignItems: 'center',
         // paddingVertical: 40,
         backgroundColor: '#fff',
-        // flex: 1,
+        flex: 1,
+
     },
     header: {
         alignItems: 'center',

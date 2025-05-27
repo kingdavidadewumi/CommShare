@@ -9,6 +9,7 @@ import { Profile } from "./App/Screens/Profile";
 import { Avatar, Button, Card } from "react-native-paper";
 import { FontAwesome } from '@expo/vector-icons';
 import { StackNavigator } from "./App/Navigator/Stack";
+import { AppProvider } from "./App/Components/globalVariables";
 // import { StackNavigator } from "./App/Navigator/Stack";
 // import {Icon} from 'react-native-vector-icons/FontAwesome';
 // import { Ionicons } from '@expo/vector-icons';
@@ -54,6 +55,8 @@ export default function App() {
   }
 
   return (
-    <StackNavigator />
+    <AppProvider>
+      <StackNavigator />
+    </AppProvider>
   );
 }
