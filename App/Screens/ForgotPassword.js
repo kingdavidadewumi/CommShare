@@ -1,4 +1,3 @@
-
 import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { Theme } from '../Components/Theme'

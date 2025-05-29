@@ -1,97 +1,129 @@
 import { Alert, SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useContext } from 'react'
 import { Theme } from '../Components/Theme'
 import { Formik } from 'formik'
-import * as Yup from 'yup'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { auth } from '../Firebase/settings'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth, db } from '../Firebase/settings'
 import { errorMessage } from '../Components/formatErrorMessage'
-
-const validation = Yup.object({
-    email: Yup.string().email().required(),
-    password: Yup.string().min(6).max(30).required()
-})
+import { doc, setDoc } from 'firebase/firestore'
+import { AppContext } from '../Components/globalVariables'
 
 export function SignUp({ navigation }) {
+    const { setPreloader, setUserUID } = useContext(AppContext)
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.content}>
-                <Text style={styles.title}>Welcome Back</Text>
-                <Text style={styles.subtitle}>Sign in to continue</Text>
+                <Text style={styles.title}>Create Account</Text>
+                <Text style={styles.subtitle}>Join us today</Text>
 
                 <Formik
-                    initialValues={{ email: "", password: "" }}
+                    initialValues={{ firstname: "", lastname: "", email: "", password: "", confirmPassword: "" }}
                     onSubmit={(values) => {
                         // console.log(values)
-                        signInWithEmailAndPassword(auth, values.email, values.password)
+                        setPreloader(true)
+                        createUserWithEmailAndPassword(auth, values.email, values.password)
                             .then((data) => {
-                                console.log(data.user.uid);
-                                navigation.replace("HomeScreen");
+                                const { uid } = data.user;
+                                // addDoc
+                                setDoc(doc(db, "users", uid), {
+                                    firstname: values.firstname,
+                                    lastname: values.lastname,
+                                    email: values.email,
+                                    image: null,
+                                    phone: null,
+                                    createdAt: new Date().getTime(),
+                                    balance: 0,
+                                    bio: "",
+                                    role: "user",
+                                }).then(() => {
+                                    setPreloader(false)
+                                    setUserUID(uid)
+                                    navigation.replace("HomeScreen");
+                                }).catch((error) => {
+                                    setPreloader(false)
+                                    console.log("Error signing up:", error);
+                                    Alert.alert("Sign Up Error", errorMessage(error.code));
+                                });
                             })
                             .catch((error) => {
+                                setPreloader(false)
                                 console.log("Error signing up:", error);
                                 Alert.alert("Sign Up Error", errorMessage(error.code));
                             });
                     }}
-                    validationSchema={validation}
                 >
-                    {({ handleChange, handleSubmit, handleBlur, values, errors, touched }) => (
+                    {({ handleChange, handleSubmit, values }) => (
                         <View style={styles.form}>
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Email"
-                                    placeholderTextColor={Theme.colors.text2}
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    autoComplete='off'
-                                    onChangeText={handleChange("email")}
-                                    onBlur={handleBlur("email")}
-                                    value={values.email}
-                                />
-                                <Text style={{ color: Theme.colors.red }}>{touched.email && errors.email}</Text>
-                            </View>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="First Name"
+                                placeholderTextColor={Theme.colors.text2}
+                                autoCapitalize="words"
+                                autoCorrect={false}
+                                onChangeText={handleChange("firstname")}
+                                value={values.firstname}
+                            />
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Last Name"
+                                placeholderTextColor={Theme.colors.text2}
+                                autoCapitalize="words"
+                                autoCorrect={false}
+                                onChangeText={handleChange("lastname")}
+                                value={values.lastname}
+                            />
 
-                            <View style={styles.inputContainer}>
-                                <TextInput
-                                    style={styles.input}
-                                    placeholder="Password"
-                                    placeholderTextColor={Theme.colors.text2}
-                                    autoCapitalize="none"
-                                    autoCorrect={false}
-                                    secureTextEntry
-                                    onChangeText={handleChange("password")}
-                                    onBlur={handleBlur("password")}
-                                    value={values.password}
-                                />
-                                <Text style={{ color: Theme.colors.red }}>{touched.password && errors.password}</Text>
-                            </View>
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Email"
+                                placeholderTextColor={Theme.colors.text2}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                onChangeText={handleChange("email")}
+                                value={values.email}
+                            />
+
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Password"
+                                placeholderTextColor={Theme.colors.text2}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                secureTextEntry
+                                onChangeText={handleChange("password")}
+                                value={values.password}
+                            />
+
+                            <TextInput
+                                style={styles.input}
+                                placeholder="Confirm Password"
+                                placeholderTextColor={Theme.colors.text2}
+                                autoCapitalize="none"
+                                autoCorrect={false}
+                                secureTextEntry
+                                onChangeText={handleChange("confirmPassword")}
+                                value={values.confirmPassword}
+                            />
 
                             <TouchableOpacity
-                                style={styles.forgotButton}
-                                onPress={() => navigation.navigate("ForgotPassword")}
-                            >
-                                <Text style={styles.forgotText}>Forgot Password?</Text>
-                            </TouchableOpacity>
-
-                            <TouchableOpacity
-                                style={styles.loginButton}
+                                style={styles.signupButton}
                                 onPress={handleSubmit}
                             >
-                                <Text style={styles.loginButtonText}>Log In</Text>
+                                <Text style={styles.signupButtonText}>Sign Up</Text>
                             </TouchableOpacity>
 
-                            <View style={styles.signupContainer}>
-                                <Text style={styles.signupText}>Don't have an account? </Text>
-                                <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-                                    <Text style={styles.signupLink}>Sign Up</Text>
+                            <View style={styles.loginContainer}>
+                                <Text style={styles.loginText}>Already have an account? </Text>
+                                <TouchableOpacity onPress={() => navigation.navigate("LogIn")}>
+                                    <Text style={styles.loginLink}>Log In</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
                     )}
                 </Formik>
             </View>
-        </SafeAreaView >
+        </SafeAreaView>
     )
 }
 
@@ -122,9 +154,6 @@ const styles = StyleSheet.create({
     form: {
         gap: Theme.sizes.lg,
     },
-    inputContainer: {
-        marginBottom: Theme.sizes.sm,
-    },
     input: {
         borderWidth: 1,
         borderColor: Theme.colors.line,
@@ -134,39 +163,30 @@ const styles = StyleSheet.create({
         fontFamily: Theme.fonts.text400,
         backgroundColor: Theme.colors.layer,
     },
-    forgotButton: {
-        alignSelf: 'flex-end',
-        marginTop: -Theme.sizes.sm,
-    },
-    forgotText: {
-        fontSize: Theme.sizes.md,
-        fontFamily: Theme.fonts.text500,
-        color: Theme.colors.primary,
-    },
-    loginButton: {
+    signupButton: {
         backgroundColor: Theme.colors.primary,
         borderRadius: Theme.sizes.borderRadius * 1.5,
         padding: Theme.sizes.padding,
         alignItems: 'center',
         marginTop: Theme.sizes.lg,
     },
-    loginButtonText: {
+    signupButtonText: {
         fontSize: Theme.sizes.lg,
         fontFamily: Theme.fonts.text600,
         color: Theme.colors.bg,
     },
-    signupContainer: {
+    loginContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: Theme.sizes.xl,
     },
-    signupText: {
+    loginText: {
         fontSize: Theme.sizes.md,
         fontFamily: Theme.fonts.text400,
         color: Theme.colors.text2,
     },
-    signupLink: {
+    loginLink: {
         fontSize: Theme.sizes.md,
         fontFamily: Theme.fonts.text600,
         color: Theme.colors.primary,

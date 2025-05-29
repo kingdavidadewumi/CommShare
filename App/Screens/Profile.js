@@ -15,12 +15,12 @@ const carouselLinks = [
 ]
 
 const { width, height } = Dimensions.get("screen")
- console.log('Width:', width);
-    console.log('Height:', height);
+console.log('Width:', width);
+console.log('Height:', height);
 
 export function Profile() {
     const [visibility, setVisibility] = useState(false)
-  
+
 
     return (
         <SafeAreaView style={{ flex: 1, }}>
@@ -101,25 +101,26 @@ export function Profile() {
                         buttonColor={"transparent"}>Log Out</AppButton>
                 </View>
 
-                <Modal
-                    visible={visibility}
-                    animationType='slide'
-                    transparent
-                >
-                    <View style={{ backgroundColor: "#000000ac", flex: 1, }}>
-                        <View style={{ flex: 1 }}></View>
-                        <View style={{ backgroundColor: "#ffffff", padding: 20, paddingBottom: 30, borderTopRightRadius: 20, borderTopLeftRadius: 20, flex: 1 }}>
-                            <Text>Log Out</Text>
-                            <Text>Are you sure you want to log out of this app?</Text>
-                            <AppButton onPress={() => setVisibility(false)}
-                                style={{ marginTop: 50, borderWidth: 1, borderColor: Theme.colors.red }}
-                                textColor={Theme.colors.red}
-                                buttonColor={"transparent"}>Yes</AppButton>
-                        </View>
-                    </View>
-                </Modal>
+
 
             </ScrollView>
+            <Modal
+                visible={visibility}
+                animationType='slide'
+                transparent
+            >
+                <View style={{ backgroundColor: "#000000ac", flex: 1, }}>
+                    <View style={{ flex: 1 }}></View>
+                    <View style={{ backgroundColor: "#ffffff", padding: 20, paddingBottom: 30, borderTopRightRadius: 20, borderTopLeftRadius: 20, flex: 1 }}>
+                        <Text>Log Out</Text>
+                        <Text>Are you sure you want to log out of this app?</Text>
+                        <AppButton onPress={() => setVisibility(false)}
+                            style={{ marginTop: 50, borderWidth: 1, borderColor: Theme.colors.red }}
+                            textColor={Theme.colors.red}
+                            buttonColor={"transparent"}>Yes</AppButton>
+                    </View>
+                </View>
+            </Modal>
 
         </SafeAreaView>
     );
