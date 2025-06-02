@@ -191,4 +191,4 @@ const styles = StyleSheet.create({
         fontFamily: Theme.fonts.text600,
         color: Theme.colors.primary,
     },
-})
+}) 

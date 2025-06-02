@@ -11,6 +11,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { StackNavigator } from "./App/Navigator/Stack";
 import { AppProvider } from "./App/Components/globalVariables";
 import { Preloader } from "./App/Components/Preloader";
+import { RootSiblingParent } from "react-native-root-siblings";
 // import { StackNavigator } from "./App/Navigator/Stack";
 // import {Icon} from 'react-native-vector-icons/FontAwesome';
 // import { Ionicons } from '@expo/vector-icons';
@@ -56,9 +57,11 @@ export default function App() {
   }
 
   return (
-    <AppProvider>
+   <RootSiblingParent>
+     <AppProvider>
       <StackNavigator />
       <Preloader />
     </AppProvider>
+   </RootSiblingParent>
   );
 }

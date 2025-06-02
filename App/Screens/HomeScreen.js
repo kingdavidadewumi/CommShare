@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import { Theme } from "../Components/Theme";
 import { FontAwesome, Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -6,6 +6,8 @@ import { Profile } from './Profile';
 import GroupList from './GroupList';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { AppContext } from '../Components/globalVariables';
+import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
+import { db } from '../Firebase/settings';
 
 const recentTransactions = [
     {
@@ -40,14 +42,40 @@ const totalAmount = "₦1,156,800,400";
 const joinedEstates = 3;
 
 function Home({ navigation }) {
-    const { userUID, userInfo } = useContext(AppContext)
+    const { userUID, userInfo, setUserInfo, setCreatedEstates, createdEstates } = useContext(AppContext);
+
+    function fetchCreatedEstates() {
+        const ref = collection(db, "estates");
+        const q = query(ref, where("createdBy", "==", userUID));
+        onSnapshot(q, (snapshot) => {
+            const qd = [];
+            snapshot.forEach(item => {
+                qd.push({ ...item.data(), docID: item.id })
+            })
+            // console.log(JSON.stringify(qd, null, 2));
+            setCreatedEstates(qd)
+        })
+    }
+
+    useEffect(() => {
+        // getDoc(doc(db, "users", userUID))
+        //     .then(user => {
+        //         setUserInfo(user.data())
+        //     })
+
+        onSnapshot(doc(db, "users", userUID), (user) => {
+            setUserInfo(user.data())
+        })
+        fetchCreatedEstates()
+    }, []);
+
 
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <View style={styles.profileContainer}>
                     <Image
-                        source={require("../../assets/icon.png")}
+                        source={require("../../assets/bg.jpg")}
                         style={styles.profileImage}
                     />
                     <View>
@@ -75,22 +103,26 @@ function Home({ navigation }) {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.card, { marginTop: 10 }]} onPress={() => navigation.navigate('CreatedEstates', { location: "Kubwa, NYSC" })}>
+            <TouchableOpacity style={[styles.card, { marginTop: 10 }]} onPress={() => navigation.navigate('Estates')}>
+                {/* <TouchableOpacity style={[styles.card, { marginTop: 10 }]} onPress={() => navigation.navigate('CreatedEstates', { location: "Kubwa, NYSC" })}> */}
                 <View style={styles.cardContent}>
-                    <View>
-                        <Text style={styles.cardTitle}>Created Estate Groups</Text>
+                    <View >
+                        <View style={styles.sectionTitleRow}>
+                            <Text style={styles.cardTitle}>Created Estate Groups</Text>
+                            <Text style={styles.estateCount}> ({createdEstates.length})</Text>
+                        </View>
                         <Text style={styles.cardSubtext}>Manage or create estate groups</Text>
                     </View>
                     <MaterialIcons name="chevron-right" size={24} color={Theme.colors.text2} />
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => { navigation.navigate("GroupList") }} style={styles.card}>
+            <TouchableOpacity onPress={() => { navigation.navigate("CreatedEstates") }} style={styles.card}>
                 <View style={styles.cardContent}>
-                    <View style={{ flex: 1 }}>
+                    <View>
                         <View style={styles.sectionTitleRow}>
                             <Text style={styles.cardTitle}>Your Communities</Text>
-                            <Text style={styles.estateCount}>{joinedEstates}</Text>
+                            <Text style={styles.estateCount}> ({joinedEstates})</Text>
                         </View>
                         <Text style={styles.cardSubtext}>Tap to view details</Text>
                     </View>
