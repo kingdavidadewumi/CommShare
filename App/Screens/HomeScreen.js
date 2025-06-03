@@ -75,7 +75,7 @@ function Home({ navigation }) {
             <View style={styles.header}>
                 <View style={styles.profileContainer}>
                     <Image
-                        source={require("../../assets/bg.jpg")}
+                        source={require("../../assets/icon.png")}
                         style={styles.profileImage}
                     />
                     <View>
@@ -103,7 +103,7 @@ function Home({ navigation }) {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.card, { marginTop: 10 }]} onPress={() => navigation.navigate('Estates')}>
+            <TouchableOpacity style={[styles.card, { marginTop: 10 }]} onPress={() => navigation.navigate('GroupList   ')}>
                 {/* <TouchableOpacity style={[styles.card, { marginTop: 10 }]} onPress={() => navigation.navigate('CreatedEstates', { location: "Kubwa, NYSC" })}> */}
                 <View style={styles.cardContent}>
                     <View >
@@ -184,7 +184,7 @@ export function HomeScreen() {
             })}
         >
             <Tab.Screen name="Home" component={Home} options={{ title: "Dashboard" }} />
-            <Tab.Screen name="Estates" component={GroupList} />
+            <Tab.Screen name="GroupList" component={GroupList} />
             <Tab.Screen name="Profile" component={Profile} options={{ title: "Johnny" }} />
         </Tab.Navigator>
     )

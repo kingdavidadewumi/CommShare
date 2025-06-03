@@ -10,6 +10,8 @@ import { LogIn } from '../Screens/LogIn';
 import { SignUp } from '../Screens/SignUp';
 import { ForgotPassword } from '../Screens/ForgotPassword';
 import { Estate } from '../Screens/Estate';
+import { UpdateEstate } from '../Screens/UpdateEstate';
+import { AddUsers } from '../Screens/UpdateEstate';
 
 const Stack = createStackNavigator();
 export function StackNavigator() {
@@ -26,6 +28,8 @@ export function StackNavigator() {
                 <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
                 <Stack.Screen name="SignUp" component={SignUp} />
                 <Stack.Screen name="Estate" component={Estate} />
+                <Stack.Screen name="UpdateEstate" component={UpdateEstate} />
+                <Stack.Screen name="AddUsers" component={AddUsers} />
                
             </Stack.Navigator>
         </NavigationContainer>

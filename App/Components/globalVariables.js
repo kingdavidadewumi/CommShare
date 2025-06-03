@@ -7,8 +7,8 @@ export function AppProvider({ children }) {
     const [estates, setEstates] = useState([]);
     const [estateGroups, setEstateGroups] = useState([]);
     const [createdEstates, setCreatedEstates] = useState([]);
-    const [userUID, setUserUID] = useState("bThyJNVNURTZef9X2ChkLRZPJ2k2"); // Winner
-    // const [userUID, setUserUID] = useState("wRb0XYo9b7hOXEeqnYMnZGBnpos1"); // MJ
+    const [userUID, setUserUID] = useState("H8ipARv0RlTGKKi3Q9rW43ml59O2"); // Winner
+    // const [userUID, setUserUID] = useState("s9aVYCEr4HdI6Fu5SgEoC2s2xgl2"); // MJ
     const [preloader, setPreloader] = useState(false);
 
 
