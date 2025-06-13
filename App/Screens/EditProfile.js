@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
     View,
     Text,
@@ -16,9 +16,14 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Theme } from "../Components/Theme";
+import { AppContext } from "../Components/globalVariables";
+import { doc, updateDoc } from "firebase/firestore";
+import { db } from "../Firebase/settings";
 
 export function EditProfile({ navigation }) {
-    const [username, setUsername] = useState("");
+    const { userUID, userInfo, setPreloader } = useContext(AppContext);
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
     const [email, setEmail] = useState("");
     const [mobile, setMobile] = useState("");
     const [dob, setDob] = useState("");
@@ -27,19 +32,39 @@ export function EditProfile({ navigation }) {
     const [isNo, setIsNo] = useState(false);
 
     const handleEditProfile = () => {
-        if (!username || !email || (!isYes && !isNo)) {
+        if (!firstname ||!lastname || !email || (!isYes && !isNo)) {
             Alert.alert("Missing Info", "Please fill in all required fields.");
             return;
         }
 
-        Alert.alert("Success", "Profile details changed.");
-        setUsername("");
-        setEmail("");
+         setPreloader(false)
+        updateDoc(doc(db, "users", userUID), {
+            firstname,
+            lastname,
+            bio,
+            
+        }).then(() => {
+              Alert.alert("Success", "Profile details changed.");
+        setFirstname("");
+        setLastname("");
+        setEmail(userInfo.email);
         setMobile("");
         setDob("");
         setBio("");
         navigation.goBack();
+        })
+            .catch((error) => {
+                console.log("Error editing profile:", error);
+                setPreloader(false)
+                Alert.alert("Profile edit Error", errorMessage(error.code));
+            });
+      
     };
+
+
+
+
+
 
     const TopBackGroundUri =
         "https://images.pexels.com/photos/517883/pexels-photo-517883.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
@@ -58,21 +83,15 @@ export function EditProfile({ navigation }) {
                         source={{ uri: TopBackGroundUri }}
                         style={styles.header}
                     >
-                        <TouchableOpacity
-                            onPress={() => navigation.goBack()}
-                            style={styles.backIcon}
-                        >
-                            <Icon name="arrow-left" size={24} color={Theme.colors.yellow} />
-                        </TouchableOpacity>
 
-                        <Image source={{ uri: profilePicUri }} style={styles.profilePic} />
+                        <Image source={userInfo?.image ? { uri: userInfo.image } : require('../../assets/user.png')} style={styles.profilePic} />
                         <TouchableOpacity
                             style={styles.editIcon}
                             onPress={() => Alert.alert("Edit Profile Picture")}
                         >
                             <Icon name="pencil" size={18} color="#fff" />
                         </TouchableOpacity>
-                        <Text style={styles.userName}>Lacey Fernandez</Text>
+                        <Text style={styles.userName}>{userInfo.firstname} {userInfo.lastname}</Text>
                     </ImageBackground>
 
                     <View style={styles.formCard}>
@@ -86,12 +105,29 @@ export function EditProfile({ navigation }) {
                                 style={styles.inputIcon}
                             />
                             <TextInput
-                                placeholder="Enter User Name *"
-                                value={username}
-                                onChangeText={setUsername}
+                                placeholder="Enter First Name *"
+                                value={firstname}
+                                onChangeText={setFirstname}
                                 placeholderTextColor="#888"
                                 style={[styles.input, styles.inputText]}
                             />
+                            
+                        </View>
+                        <View style={styles.inputContainer}>
+                            <Icon
+                                name="account"
+                                size={Theme.sizes.icon.md}
+                                color="#555"
+                                style={styles.inputIcon}
+                            />
+                           <TextInput
+                                placeholder="Enter Last Name *"
+                                value={lastname}
+                                onChangeText={setLastname}
+                                placeholderTextColor="#888"
+                                style={[styles.input, styles.inputText]}
+                            />
+                            
                         </View>
 
                         <View style={styles.inputContainer}>

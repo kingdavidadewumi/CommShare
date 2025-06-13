@@ -42,7 +42,9 @@ const totalAmount = "₦1,156,800,400";
 const joinedEstates = 3;
 
 function Home({ navigation }) {
-    const { userUID, userInfo, setUserInfo, setCreatedEstates, createdEstates } = useContext(AppContext);
+    const { userUID, userInfo, setUserInfo, setCreatedEstates, createdEstates,
+        communities, setCommunities,
+    } = useContext(AppContext);
 
     function fetchCreatedEstates() {
         const ref = collection(db, "estates");
@@ -53,7 +55,20 @@ function Home({ navigation }) {
                 qd.push({ ...item.data(), docID: item.id })
             })
             // console.log(JSON.stringify(qd, null, 2));
-            setCreatedEstates(qd)
+            setCreatedEstates(qd.sort((a, b) => b.createdAt - a.createdAt));
+        })
+    }
+
+    function fetchCommunities() {
+        const ref = collection(db, "estates");
+        const q = query(ref, where("users", "array-contains", userUID));
+        onSnapshot(q, (snapshot) => {
+            const qd = [];
+            snapshot.forEach(item => {
+                qd.push({ ...item.data(), docID: item.id })
+            })
+            // console.log(JSON.stringify(qd, null, 2));
+            setCommunities(qd);
         })
     }
 
@@ -67,6 +82,7 @@ function Home({ navigation }) {
             setUserInfo(user.data())
         })
         fetchCreatedEstates()
+        fetchCommunities()
     }, []);
 
 
@@ -75,11 +91,11 @@ function Home({ navigation }) {
             <View style={styles.header}>
                 <View style={styles.profileContainer}>
                     <Image
-                        source={require("../../assets/icon.png")}
+                        source={userInfo?.image ? { uri: userInfo?.image } : require('../../assets/user.png')}
                         style={styles.profileImage}
                     />
                     <View>
-                        <Text style={styles.greetingText}>Hi, {userInfo.firstname} {userInfo.lastname}</Text>
+                        <Text style={styles.greetingText}>Hi, {userInfo?.firstname} {userInfo?.lastname}</Text>
                         <Text style={styles.welcomeText}>Welcome to Commshare</Text>
                     </View>
                 </View>
@@ -103,7 +119,7 @@ function Home({ navigation }) {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.card, { marginTop: 10 }]} onPress={() => navigation.navigate('GroupList   ')}>
+            <TouchableOpacity style={[styles.card, { marginTop: 10 }]} onPress={() => navigation.navigate('Estates')}>
                 {/* <TouchableOpacity style={[styles.card, { marginTop: 10 }]} onPress={() => navigation.navigate('CreatedEstates', { location: "Kubwa, NYSC" })}> */}
                 <View style={styles.cardContent}>
                     <View >
@@ -117,12 +133,12 @@ function Home({ navigation }) {
                 </View>
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => { navigation.navigate("CreatedEstates") }} style={styles.card}>
+            <TouchableOpacity onPress={() => { navigation.navigate("Communities") }} style={styles.card}>
                 <View style={styles.cardContent}>
                     <View>
                         <View style={styles.sectionTitleRow}>
                             <Text style={styles.cardTitle}>Your Communities</Text>
-                            <Text style={styles.estateCount}> ({joinedEstates})</Text>
+                            <Text style={styles.estateCount}> ({communities.length})</Text>
                         </View>
                         <Text style={styles.cardSubtext}>Tap to view details</Text>
                     </View>
@@ -184,7 +200,7 @@ export function HomeScreen() {
             })}
         >
             <Tab.Screen name="Home" component={Home} options={{ title: "Dashboard" }} />
-            <Tab.Screen name="GroupList" component={GroupList} />
+            <Tab.Screen name="Estates" component={GroupList} />
             <Tab.Screen name="Profile" component={Profile} options={{ title: "Johnny" }} />
         </Tab.Navigator>
     )
